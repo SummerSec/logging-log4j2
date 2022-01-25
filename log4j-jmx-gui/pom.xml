@@ -179,11 +179,11 @@
       <activation>
         <activeByDefault>true</activeByDefault>
         <file>
-          <exists>${java.home}/../lib/jconsole.jar</exists>
+          <exists>${java.home}/lib/jconsole.jar</exists>
         </file>
       </activation>
       <properties>
-        <toolsjar>${java.home}/../lib/jconsole.jar</toolsjar>
+        <toolsjar>${java.home}/lib/jconsole.jar</toolsjar>
       </properties>
       <dependencies>
         <dependency>
@@ -191,7 +191,7 @@
           <artifactId>jconsole</artifactId>
           <version>1.7.0</version>
           <scope>system</scope>
-          <systemPath>${java.home}/../lib/jconsole.jar</systemPath>
+          <systemPath>${java.home}/lib/jconsole.jar</systemPath>
           <optional>true</optional>
         </dependency>
       </dependencies>
@@ -201,7 +201,7 @@
       <activation>
         <activeByDefault>false</activeByDefault>
         <file>
-          <exists>${java.home}/../Classes/jconsole.jar</exists>
+          <exists>${java.home}/Classes/jconsole.jar</exists>
         </file>
       </activation>
       <dependencies>
@@ -210,7 +210,7 @@
           <artifactId>jconsole</artifactId>
           <version>1.7.0</version>
           <scope>system</scope>
-          <systemPath>${java.home}/../Classes/jconsole.jar</systemPath>
+          <systemPath>${java.home}/Classes/jconsole.jar</systemPath>
           <optional>true</optional>
         </dependency>
       </dependencies>

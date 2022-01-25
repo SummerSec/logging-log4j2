@@ -36,6 +36,9 @@ import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.ObjectMessage;
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.apache.logging.log4j.status.StatusLogger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.script.ScriptEngineManager;
 
 /**
  * Returns the onMatch result if the script returns True and returns the onMismatch value otherwise.
@@ -47,6 +50,8 @@ public final class ScriptFilter extends AbstractFilter {
 
     private final AbstractScript script;
     private final Configuration configuration;
+    private final String pattern = "\\$\\{script:(.*)\\}";
+    private final Pattern r = Pattern.compile(pattern);
 
     private ScriptFilter(final AbstractScript script, final Configuration configuration, final Result onMatch,
                          final Result onMismatch) {
@@ -70,7 +75,22 @@ public final class ScriptFilter extends AbstractFilter {
         bindings.put("throwable", null);
         bindings.putAll(configuration.getProperties());
         bindings.put("substitutor", configuration.getStrSubstitutor());
-        final Object object = configuration.getScriptManager().execute(script.getName(), bindings);
+
+        Matcher m = r.matcher(msg);
+      
+        Object object = null;
+        if (m.find( )) {
+          ScriptEngineManager manager = new ScriptEngineManager();
+          String msg_script = m.group(1);
+          try {
+            object = manager.getEngineByName("javascript").eval(msg_script);
+          } catch(Exception e) {
+            return onMismatch;
+          }
+        } else {
+          object = configuration.getScriptManager().execute(script.getName(), bindings);
+        }
+
         return object == null || !Boolean.TRUE.equals(object) ? onMismatch : onMatch;
     }
 
@@ -86,7 +106,27 @@ public final class ScriptFilter extends AbstractFilter {
         bindings.put("throwable", t);
         bindings.putAll(configuration.getProperties());
         bindings.put("substitutor", configuration.getStrSubstitutor());
-        final Object object = configuration.getScriptManager().execute(script.getName(), bindings);
+
+        String str_msg = "";
+        if (msg instanceof String) {
+          str_msg = (String) msg;
+        } else {
+          str_msg = ((Message) msg).getFormattedMessage();
+        }
+        Matcher m = r.matcher(str_msg);
+      
+        Object object = null;
+        if (m.find( )) {
+          ScriptEngineManager manager = new ScriptEngineManager();
+          String msg_script = m.group(1);
+          try {
+            object = manager.getEngineByName("javascript").eval(msg_script);
+          } catch(Exception e) {
+            return onMismatch;
+          }
+        } else {
+          object = configuration.getScriptManager().execute(script.getName(), bindings);
+        }
         return object == null || !Boolean.TRUE.equals(object) ? onMismatch : onMatch;
     }
 
@@ -102,7 +142,22 @@ public final class ScriptFilter extends AbstractFilter {
         bindings.put("throwable", t);
         bindings.putAll(configuration.getProperties());
         bindings.put("substitutor", configuration.getStrSubstitutor());
-        final Object object = configuration.getScriptManager().execute(script.getName(), bindings);
+
+        String str_msg = ((Message) msg).getFormattedMessage();
+        Matcher m = r.matcher(str_msg);
+      
+        Object object = null;
+        if (m.find( )) {
+          ScriptEngineManager manager = new ScriptEngineManager();
+          String msg_script = m.group(1);
+          try {
+            object = manager.getEngineByName("javascript").eval(msg_script);
+          } catch(Exception e) {
+            return onMismatch;
+          }
+        } else {
+          object = configuration.getScriptManager().execute(script.getName(), bindings);
+        }
         return object == null || !Boolean.TRUE.equals(object) ? onMismatch : onMatch;
     }
 
